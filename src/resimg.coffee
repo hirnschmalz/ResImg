@@ -99,9 +99,6 @@ class ResImgItem
     false
 
   getImageSrc: (width, isRetina, isPortrait) ->
-
-    console.log "called"
-
     src  = null
     base = null
 
