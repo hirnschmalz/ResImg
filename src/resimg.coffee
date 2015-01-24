@@ -162,6 +162,13 @@ class @ResImg
     for image in @images
       image.getImageSrc(viewportWidth, deviceHasHdpi, deviceIsPortrait)
 
+  addImage: (image) ->
+    if ResImgItem::isResponsiveImage(image)
+      [viewportWidth, viewportHeight, deviceHasHdpi, deviceIsPortrait] = @getViewportInfo()
+      newImage = new ResImgItem(image)
+      @images.push newImage
+      newImage.getImageSrc(viewportWidth, deviceHasHdpi, deviceIsPortrait)
+
   getViewportInfo: () ->
     viewportWidth    = window.innerWidth  || document.documentElement.clientWidth  || document.body.clientWidth
     viewportHeight   = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight

@@ -133,7 +133,6 @@ Licensed under the MIT license
 
     ResImgItem.prototype.getImageSrc = function(width, isRetina, isPortrait) {
       var base, breakpoint, condition, finalImageSrc, imgSrc, isDomainImage, newImageSrc, queries, query, src, _i, _len, _ref;
-      console.log("called");
       src = null;
       base = null;
       if (isRetina) {
@@ -192,21 +191,37 @@ Licensed under the MIT license
     }
 
     ResImg.prototype.checkImages = function() {
-      var deviceHasHdpi, deviceIsPortrait, image, viewportHeight, viewportWidth, _i, _len, _ref, _results;
+      var deviceHasHdpi, deviceIsPortrait, image, viewportHeight, viewportWidth, _i, _len, _ref, _ref1, _results;
       if (this.images.length === 0) {
         return;
       }
-      viewportWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-      viewportHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-      deviceHasHdpi = window.devicePixelRatio && window.devicePixelRatio >= 1.2 ? 1 : 0;
-      deviceIsPortrait = viewportHeight > viewportWidth;
-      _ref = this.images;
+      _ref = this.getViewportInfo(), viewportWidth = _ref[0], viewportHeight = _ref[1], deviceHasHdpi = _ref[2], deviceIsPortrait = _ref[3];
+      _ref1 = this.images;
       _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        image = _ref[_i];
+      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+        image = _ref1[_i];
         _results.push(image.getImageSrc(viewportWidth, deviceHasHdpi, deviceIsPortrait));
       }
       return _results;
+    };
+
+    ResImg.prototype.addImage = function(image) {
+      var deviceHasHdpi, deviceIsPortrait, newImage, viewportHeight, viewportWidth, _ref;
+      if (ResImgItem.prototype.isResponsiveImage(image)) {
+        _ref = this.getViewportInfo(), viewportWidth = _ref[0], viewportHeight = _ref[1], deviceHasHdpi = _ref[2], deviceIsPortrait = _ref[3];
+        newImage = new ResImgItem(image);
+        this.images.push(newImage);
+        return newImage.getImageSrc(viewportWidth, deviceHasHdpi, deviceIsPortrait);
+      }
+    };
+
+    ResImg.prototype.getViewportInfo = function() {
+      var deviceHasHdpi, deviceIsPortrait, viewportHeight, viewportWidth;
+      viewportWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+      viewportHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+      deviceHasHdpi = window.devicePixelRatio && window.devicePixelRatio >= 1.2 ? true : false;
+      deviceIsPortrait = viewportHeight > viewportWidth;
+      return [viewportHeight, viewportHeight, deviceHasHdpi, deviceIsPortrait];
     };
 
     return ResImg;
