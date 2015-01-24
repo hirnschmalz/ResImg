@@ -1,19 +1,25 @@
 {
-  "name": "resimg.js",
-  "version": "1.0.0",
-  "description": "Super light plugin for responsive image handling",
-  "main": "resimg.js",
+  "name": "resimg",
+  "version": "1.0.1",
+  "description": "A lightweight JavaScript plugin to enable responsive images and different images for landscape and portrait",
+  "main": "dist/resimg.min.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "javascript",
-    "plugin",
-    "responsive image",
-    "responsive img",
-    "responsive web design"
+      "javascript",
+      "js",
+      "image",
+      "responsive image",
+      "responsive img",
+      "responsive web design image",
+      "rwd image"
   ],
-  "author": "Markus Bischof <developer@hirnschmalz.at>",
+  "author": {
+      "name": "Markus Bischof",
+      "email": "developer@hirnschmalz.at",
+      "url": "http://hirnschmalz.at"
+  },
   "license": "MIT",
   "devDependencies": {
     "grunt": "^0.4.5",
