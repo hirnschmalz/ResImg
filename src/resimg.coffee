@@ -99,6 +99,9 @@ class ResImgItem
     false
 
   getImageSrc: (width, isRetina, isPortrait) ->
+
+    console.log "called"
+
     src  = null
     base = null
 
@@ -166,21 +169,41 @@ class @ResImg
       image.getImageSrc(viewportWidth, deviceHasHdpi, deviceIsPortrait)
 
 
+debounce = (func, wait, immediate) ->
+  timeout = null
+
+  () ->
+    context = this
+    args = arguments
+
+    later = () ->
+      timeout = null;
+
+      if !immediate
+        func.apply(context, args)
+
+      callNow = immediate && !timeout
+      clearTimeout(timeout)
+      timeout = setTimeout(later, wait)
+      func.apply(context, args) if callNow
+
 # Create an instance of our ResImg class
 resimg = new ResImg
 
 # Listen to window resizing
+debounceTimer = 250
+
 if window.addEventListener
   window.addEventListener('load', () ->
     resimg.checkImages()
   , false)
   window.addEventListener('resize', () ->
-    resimg.checkImages()
+    debounce resimg.checkImages(), debounceTimer
   , false)
 else
   window.attachEvent('onload', () ->
     resimg.checkImages()
   )
   window.attachEvent('onresize', () ->
-    resimg.checkImages()
+    debounce resimg.checkImages(), debounceTimer
   )

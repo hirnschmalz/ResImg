@@ -8,7 +8,7 @@ Licensed under the MIT license
  */
 
 (function() {
-  var ResImgItem, resimg;
+  var ResImgItem, debounce, debounceTimer, resimg;
 
   ResImgItem = (function() {
     var image, _base, _base2x, _baseLs, _baseLs2x, _basePt, _basePt2x, _src, _src2x, _srcLs, _srcLs2x, _srcPt, _srcPt2x;
@@ -133,6 +133,7 @@ Licensed under the MIT license
 
     ResImgItem.prototype.getImageSrc = function(width, isRetina, isPortrait) {
       var base, breakpoint, condition, finalImageSrc, imgSrc, isDomainImage, newImageSrc, queries, query, src, _i, _len, _ref;
+      console.log("called");
       src = null;
       base = null;
       if (isRetina) {
@@ -212,21 +213,46 @@ Licensed under the MIT license
 
   })();
 
+  debounce = function(func, wait, immediate) {
+    var timeout;
+    timeout = null;
+    return function() {
+      var args, context, later;
+      context = this;
+      args = arguments;
+      return later = function() {
+        var callNow;
+        timeout = null;
+        if (!immediate) {
+          func.apply(context, args);
+        }
+        callNow = immediate && !timeout;
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+        if (callNow) {
+          return func.apply(context, args);
+        }
+      };
+    };
+  };
+
   resimg = new ResImg;
+
+  debounceTimer = 250;
 
   if (window.addEventListener) {
     window.addEventListener('load', function() {
       return resimg.checkImages();
     }, false);
     window.addEventListener('resize', function() {
-      return resimg.checkImages();
+      return debounce(resimg.checkImages(), debounceTimer);
     }, false);
   } else {
     window.attachEvent('onload', function() {
       return resimg.checkImages();
     });
     window.attachEvent('onresize', function() {
-      return resimg.checkImages();
+      return debounce(resimg.checkImages(), debounceTimer);
     });
   }
 
