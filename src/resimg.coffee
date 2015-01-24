@@ -156,14 +156,19 @@ class @ResImg
     return if @images.length == 0
 
     # Gather some information about the users device
-    viewportWidth    = window.innerWidth  || document.documentElement.clientWidth  || document.body.clientWidth
-    viewportHeight   = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
-    deviceHasHdpi    = if window.devicePixelRatio and window.devicePixelRatio >= 1.2 then 1 else 0
-    deviceIsPortrait = viewportHeight > viewportWidth
+    [viewportWidth, viewportHeight, deviceHasHdpi, deviceIsPortrait] = @getViewportInfo()
 
     # Process all the images found on the page
     for image in @images
       image.getImageSrc(viewportWidth, deviceHasHdpi, deviceIsPortrait)
+
+  getViewportInfo: () ->
+    viewportWidth    = window.innerWidth  || document.documentElement.clientWidth  || document.body.clientWidth
+    viewportHeight   = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
+    deviceHasHdpi    = if (window.devicePixelRatio and window.devicePixelRatio >= 1.2) then true else false
+    deviceIsPortrait = viewportHeight > viewportWidth
+
+    return [viewportHeight, viewportHeight, deviceHasHdpi, deviceIsPortrait]
 
 
 debounce = (func, wait, immediate) ->
