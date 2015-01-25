@@ -1,11 +1,10 @@
 ###
 @name: resimg.js
-@version: 1.1
+@version: 1.0.2
 
 Copyright 2015-2015 Markus Bischof, http://hirnschmalz.at
 Licensed under the MIT license
 ###
-
 class ResImgItem
 
   # Class variables
@@ -197,22 +196,22 @@ debounce = (func, wait, immediate) ->
       func.apply(context, args) if callNow
 
 # Create an instance of our ResImg class
-resimg = new ResImg
+window.resimg = new ResImg
 
 # Listen to window resizing
 debounceTimer = 250
 
 if window.addEventListener
   window.addEventListener('load', () ->
-    resimg.checkImages()
+    window.resimg.checkImages()
   , false)
   window.addEventListener('resize', () ->
-    debounce resimg.checkImages(), debounceTimer
+    debounce window.resimg.checkImages(), debounceTimer
   , false)
 else
   window.attachEvent('onload', () ->
-    resimg.checkImages()
+    window.resimg.checkImages()
   )
   window.attachEvent('onresize', () ->
-    debounce resimg.checkImages(), debounceTimer
+    debounce window.resimg.checkImages(), debounceTimer
   )

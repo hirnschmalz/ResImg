@@ -1,14 +1,14 @@
 
 /*
 @name: resimg.js
-@version: 1.1
+@version: 1.0.2
 
 Copyright 2015-2015 Markus Bischof, http://hirnschmalz.at
 Licensed under the MIT license
  */
 
 (function() {
-  var ResImgItem, debounce, debounceTimer, resimg;
+  var ResImgItem, debounce, debounceTimer;
 
   ResImgItem = (function() {
     var image, _base, _base2x, _baseLs, _baseLs2x, _basePt, _basePt2x, _src, _src2x, _srcLs, _srcLs2x, _srcPt, _srcPt2x;
@@ -251,23 +251,23 @@ Licensed under the MIT license
     };
   };
 
-  resimg = new ResImg;
+  window.resimg = new ResImg;
 
   debounceTimer = 250;
 
   if (window.addEventListener) {
     window.addEventListener('load', function() {
-      return resimg.checkImages();
+      return window.resimg.checkImages();
     }, false);
     window.addEventListener('resize', function() {
-      return debounce(resimg.checkImages(), debounceTimer);
+      return debounce(window.resimg.checkImages(), debounceTimer);
     }, false);
   } else {
     window.attachEvent('onload', function() {
-      return resimg.checkImages();
+      return window.resimg.checkImages();
     });
     window.attachEvent('onresize', function() {
-      return debounce(resimg.checkImages(), debounceTimer);
+      return debounce(window.resimg.checkImages(), debounceTimer);
     });
   }
 

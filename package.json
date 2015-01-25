@@ -1,6 +1,6 @@
 {
   "name": "resimg",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A lightweight JavaScript plugin to enable responsive images and different images for landscape and portrait",
   "main": "dist/resimg.min.js",
   "scripts": {
