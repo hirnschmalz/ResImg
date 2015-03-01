@@ -1,7 +1,7 @@
 
 /*
-@name: resimg.js
-@version: 1.0.2
+@name: ResImg.js
+@version: 1.0.3
 
 Copyright 2015-2015 Markus Bischof, http://hirnschmalz.at
 Licensed under the MIT license
@@ -116,10 +116,12 @@ Licensed under the MIT license
     ResImgItem.prototype.hasAttr = function(element, attribute) {
       var returnValue;
       returnValue = void 0;
-      if (!element.hasAttribute) {
-        returnValue = element.getAttribute(attribute) !== null;
-      } else {
-        returnValue = element.hasAttribute(attribute);
+      if (element != null) {
+        if (!element.hasAttribute) {
+          returnValue = element.getAttribute(attribute) !== null;
+        } else {
+          returnValue = element.hasAttribute(attribute);
+        }
       }
       return returnValue;
     };
@@ -173,9 +175,11 @@ Licensed under the MIT license
   })();
 
   this.ResImg = (function() {
-    var images;
+    var images, maxWidth;
 
     images = [];
+
+    maxWidth = 0;
 
     function ResImg() {
       var image, relevantImages, _i, _len;
@@ -196,13 +200,16 @@ Licensed under the MIT license
         return;
       }
       _ref = this.getViewportInfo(), viewportWidth = _ref[0], viewportHeight = _ref[1], deviceHasHdpi = _ref[2], deviceIsPortrait = _ref[3];
-      _ref1 = this.images;
-      _results = [];
-      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-        image = _ref1[_i];
-        _results.push(image.getImageSrc(viewportWidth, deviceHasHdpi, deviceIsPortrait));
+      if (viewportWidth > maxWidth) {
+        maxWidth = viewportWidth;
+        _ref1 = this.images;
+        _results = [];
+        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+          image = _ref1[_i];
+          _results.push(image.getImageSrc(viewportWidth, deviceHasHdpi, deviceIsPortrait));
+        }
+        return _results;
       }
-      return _results;
     };
 
     ResImg.prototype.addImage = function(image) {
@@ -221,7 +228,7 @@ Licensed under the MIT license
       viewportHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
       deviceHasHdpi = window.devicePixelRatio && window.devicePixelRatio >= 1.2 ? true : false;
       deviceIsPortrait = viewportHeight > viewportWidth;
-      return [viewportHeight, viewportHeight, deviceHasHdpi, deviceIsPortrait];
+      return [viewportWidth, viewportHeight, deviceHasHdpi, deviceIsPortrait];
     };
 
     return ResImg;
@@ -251,23 +258,23 @@ Licensed under the MIT license
     };
   };
 
-  window.resimg = new ResImg;
+  window.ResImg = new ResImg;
 
   debounceTimer = 250;
 
   if (window.addEventListener) {
     window.addEventListener('load', function() {
-      return window.resimg.checkImages();
+      return window.ResImg.checkImages();
     }, false);
     window.addEventListener('resize', function() {
-      return debounce(window.resimg.checkImages(), debounceTimer);
+      return debounce(window.ResImg.checkImages(), debounceTimer);
     }, false);
   } else {
     window.attachEvent('onload', function() {
-      return window.resimg.checkImages();
+      return window.ResImg.checkImages();
     });
     window.attachEvent('onresize', function() {
-      return debounce(window.resimg.checkImages(), debounceTimer);
+      return debounce(window.ResImg.checkImages(), debounceTimer);
     });
   }
 

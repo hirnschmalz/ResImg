@@ -1,6 +1,6 @@
 ###
-@name: resimg.js
-@version: 1.0.2
+@name: ResImg.js
+@version: 1.0.3
 
 Copyright 2015-2015 Markus Bischof, http://hirnschmalz.at
 Licensed under the MIT license
@@ -84,10 +84,11 @@ class ResImgItem
 
   hasAttr: (element, attribute) ->
     returnValue = undefined
-    if !element.hasAttribute
-      returnValue = element.getAttribute(attribute) != null
-    else
-      returnValue = element.hasAttribute(attribute)
+    if element?
+      if !element.hasAttribute
+        returnValue = element.getAttribute(attribute) != null
+      else
+        returnValue = element.hasAttribute(attribute)
 
     returnValue
 
@@ -136,6 +137,12 @@ class @ResImg
   # Declare our class variables
   images = []
 
+  # It only makes sense to load bigger images,
+  # as a reason of that we save the biggest resolution
+  # for what we loaded images.
+  maxWidth = 0
+
+
   constructor: ->
 
     # Get all the images in our document
@@ -150,16 +157,18 @@ class @ResImg
     @images = relevantImages
 
   checkImages: () ->
-
     # Only do something if there are images are on the current page
     return if @images.length == 0
 
     # Gather some information about the users device
     [viewportWidth, viewportHeight, deviceHasHdpi, deviceIsPortrait] = @getViewportInfo()
 
-    # Process all the images found on the page
-    for image in @images
-      image.getImageSrc(viewportWidth, deviceHasHdpi, deviceIsPortrait)
+    if viewportWidth > maxWidth
+      maxWidth = viewportWidth
+
+      # Process all the images found on the page
+      for image in @images
+        image.getImageSrc(viewportWidth, deviceHasHdpi, deviceIsPortrait)
 
   addImage: (image) ->
     if ResImgItem::isResponsiveImage(image)
@@ -174,7 +183,7 @@ class @ResImg
     deviceHasHdpi    = if (window.devicePixelRatio and window.devicePixelRatio >= 1.2) then true else false
     deviceIsPortrait = viewportHeight > viewportWidth
 
-    return [viewportHeight, viewportHeight, deviceHasHdpi, deviceIsPortrait]
+    return [viewportWidth, viewportHeight, deviceHasHdpi, deviceIsPortrait]
 
 
 debounce = (func, wait, immediate) ->
@@ -196,22 +205,22 @@ debounce = (func, wait, immediate) ->
       func.apply(context, args) if callNow
 
 # Create an instance of our ResImg class
-window.resimg = new ResImg
+window.ResImg = new ResImg
 
 # Listen to window resizing
 debounceTimer = 250
 
 if window.addEventListener
   window.addEventListener('load', () ->
-    window.resimg.checkImages()
+    window.ResImg.checkImages()
   , false)
   window.addEventListener('resize', () ->
-    debounce window.resimg.checkImages(), debounceTimer
+    debounce window.ResImg.checkImages(), debounceTimer
   , false)
 else
   window.attachEvent('onload', () ->
-    window.resimg.checkImages()
+    window.ResImg.checkImages()
   )
   window.attachEvent('onresize', () ->
-    debounce window.resimg.checkImages(), debounceTimer
+    debounce window.ResImg.checkImages(), debounceTimer
   )
