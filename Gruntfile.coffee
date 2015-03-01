@@ -6,12 +6,12 @@ module.exports = (grunt) ->
     coffee:
       resimg:
         files:
-          'dist/resimg.js': 'src/resimg.coffee'
+          'dist/ResImg.js': 'src/ResImg.coffee'
 
     jshint:
       resimg:
         files:
-          src: ['dist/resimg.js']
+          src: ['dist/ResImg.js']
   #      options:
   #        'curly': true
   #        'immed': true
@@ -32,13 +32,13 @@ module.exports = (grunt) ->
 #        beautify: true
       resimg:
         files:
-          'dist/resimg.min.js': 'dist/resimg.js'
+          'dist/ResImg.min.js': 'dist/ResImg.js'
 
     copy:
       resimg:
         expand: true
         cwd: 'dist/'
-        src: 'resimg.min.js'
+        src: 'ResImg.min.js'
         dest: 'demo/js/'
         flatten: true
 
